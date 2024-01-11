@@ -8,6 +8,8 @@ class TaskSchema(BaseModel):
     name: str
     description: str
     created_at: datetime
+    updated_at: datetime
+    attachments: List[str]
 
     class Config:
         from_attributes = True
@@ -16,12 +18,13 @@ class TaskSchema(BaseModel):
 class SignUpRequest(BaseModel):
     name: str
     description: str
+    attachments: List[str]
 
 
 class TaskUpdateRequest(BaseModel):
     name: str
     description: str
-    created_at: datetime
+    attachments: List[str]
 
 
 class TasksListResponse(BaseModel):

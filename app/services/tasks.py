@@ -14,7 +14,6 @@ class TaskService:
         self.model = ModelTask
 
     async def get_all_tasks(self) -> TasksListResponse:
-
         tasks = TasksListResponse(tasks=(await self.session.execute(select(self.model))).scalars().all())
         return tasks
 
@@ -28,7 +27,9 @@ class TaskService:
     async def create_task(self, task: SignUpRequest) -> SignUpRequest:
         task = ModelTask(name=task.name,
                          description=task.description,
-                         created_at=datetime.utcnow())
+                         created_at=datetime.utcnow(),
+                         updated_at=datetime.utcnow(),
+                         attachments=task.attachments)
         self.session.add(task)
         await self.session.commit()
         await self.session.refresh(task)
@@ -38,7 +39,8 @@ class TaskService:
         task_db = await self.get_task_by_id(task_id_update)
         task_db.name = task_update_request.name
         task_db.description = task_update_request.description
-        task_db.created_at = datetime.utcnow()
+        task_db.updated_at = datetime.utcnow()
+        task_db.attachments = task_update_request.attachments
         await self.session.commit()
         await self.session.refresh(task_db)
         return task_db
